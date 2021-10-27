@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group 'org.springframework'
+version '5.1.21.BUILD-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    maven { url "https://github.com/shepherd819/spring-framework.git" }
+    mavenCentral()
+}
+
+dependencies {
+    compile(project(":spring-jdbc"))
+    compile(project(":spring-context"))
+    compile(project(":spring-aop"))
+    compile(project(":spring-web"))
+    compile(project(":spring-oxm"))
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.44'
+    //aop相关
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.5'
+    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.5'
+
+
+}
+
+test {
+    useJUnitPlatform()
+}

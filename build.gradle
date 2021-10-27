@@ -2,6 +2,7 @@ buildscript {
 	repositories {
 		gradlePluginPortal()
 		maven { url "https://repo.spring.io/plugins-release" }
+//		maven { url "https://github.com/shepherd819/spring-framework.git" }
 	}
 	dependencies {
 		classpath("io.spring.gradle:propdeps-plugin:0.0.9.RELEASE")
@@ -118,8 +119,8 @@ configure(allprojects) { project ->
 		kotlinOptions {
 			jvmTarget = "1.8"
 			freeCompilerArgs = ["-Xjsr305=strict"]
-			apiVersion = "1.1"
-			languageVersion = "1.1"
+			apiVersion = "1.2"
+			languageVersion = "1.2"
 		}
 	}
 
