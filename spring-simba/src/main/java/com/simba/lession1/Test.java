@@ -1,5 +1,6 @@
 package com.simba.lession1;
 
+import com.simba.lession1.service.SimbaBeanPostProcessor;
 import com.simba.lession1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -15,6 +16,8 @@ public class Test {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext ap = new AnnotationConfigApplicationContext(AppConfig.class);
 		UserService userService = ap.getBean("userService", UserService.class);
+		SimbaBeanPostProcessor simbaBeanPostProcessor = ap.getBean("simbaBeanPostProcessor", SimbaBeanPostProcessor.class);
+
 		userService.test();
 
 //		class UserServiceProxy extends UserService{

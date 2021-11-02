@@ -4,6 +4,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +19,8 @@ public class UserService implements InitializingBean {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	@Autowired
+	UserService userService;
 //	public UserService() {
 //		System.out.println("1");
 //	}
@@ -33,16 +36,20 @@ public class UserService implements InitializingBean {
 //		System.out.println("3");
 //	}
 
-	@PostConstruct
-	public void a(){
-		//mysql -》User->admin
-	}
+//	@PostConstruct
+//	public void a(){
+//		//mysql -》User->admin
+//	}
 	@Transactional
 	public void test(){
-		jdbcTemplate.execute("insert into user values(7,1,1)");
-		throw new NullPointerException();
+		jdbcTemplate.execute("insert into user values(9,1,1)");
+		userService.a();
 	}
 
+	@Transactional(propagation = Propagation.NEVER)
+	public void a(){
+
+	}
 	@Override
 	public void afterPropertiesSet() throws Exception {
 

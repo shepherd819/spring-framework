@@ -1667,6 +1667,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 		Object object = null;
 		if (mbd == null) {
+			//从factoryBeanObjectCache缓存中获取factoryBean
 			object = getCachedObjectForFactoryBean(beanName);
 		}
 		if (object == null) {
