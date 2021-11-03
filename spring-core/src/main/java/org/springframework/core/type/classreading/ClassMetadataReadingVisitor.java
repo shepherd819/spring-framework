@@ -167,6 +167,7 @@ class ClassMetadataReadingVisitor extends ClassVisitor implements ClassMetadata 
 
 	@Override
 	public boolean isConcrete() {
+		//不是接口或不是抽象类都是具体的类
 		return !(this.isInterface || this.isAbstract);
 	}
 
