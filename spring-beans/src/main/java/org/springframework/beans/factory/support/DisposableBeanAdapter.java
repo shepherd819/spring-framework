@@ -384,7 +384,9 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 		if (bean instanceof DisposableBean || bean instanceof AutoCloseable) {
 			return true;
 		}
+		//查看beanDefinition有没有指定销毁方法
 		String destroyMethodName = beanDefinition.getDestroyMethodName();
+
 		if (AbstractBeanDefinition.INFER_METHOD.equals(destroyMethodName)) {
 			return (ClassUtils.hasMethod(bean.getClass(), CLOSE_METHOD_NAME) ||
 					ClassUtils.hasMethod(bean.getClass(), SHUTDOWN_METHOD_NAME));
