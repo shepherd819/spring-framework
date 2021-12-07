@@ -499,6 +499,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	@Override
 	public boolean isTypeMatch(String name, ResolvableType typeToMatch) throws NoSuchBeanDefinitionException {
+		//判断name所对应的bean的类型是不是typeToMatch
+
+		//如果name是&xxx，那么beanName就是xxx
 		String beanName = transformedBeanName(name);
 
 		// Check manually registered singletons.
@@ -514,6 +517,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 			}
 			else if (!BeanFactoryUtils.isFactoryDereference(name)) {
+				//不是FactoryBean就是普通bean，直接匹配
 				if (typeToMatch.isInstance(beanInstance)) {
 					// Direct match for exposed instance?
 					return true;

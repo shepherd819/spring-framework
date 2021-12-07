@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 
 @Component
 @Conditional(MyCondition.class)
@@ -22,6 +23,7 @@ public class UserService implements SmartInitializingSingleton, DisposableBean {
 		System.out.println("test");
 	}
 
+	@Resource
 	private OrderService orderService;
 
 	public UserService() {

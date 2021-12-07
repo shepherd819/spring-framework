@@ -7,8 +7,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class MyTest {
 	public static void main(String[] args) {
-		annotation();
+//		annotation();
 //		xml();
+		circleDependency();
+	}
+
+	public static void circleDependency(){
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MyApp.class);
+		context.getBean("AService");
+		context.getBean("BService");
 	}
 
 	private static void annotation() {
