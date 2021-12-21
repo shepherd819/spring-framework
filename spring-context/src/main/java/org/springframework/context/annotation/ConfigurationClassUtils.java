@@ -81,12 +81,14 @@ abstract class ConfigurationClassUtils {
 	public static boolean checkConfigurationClassCandidate(
 			BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
 
+		//@Bean定义的配置类Bean是不起作用的
 		String className = beanDef.getBeanClassName();
 		if (className == null || beanDef.getFactoryMethodName() != null) {
 			return false;
 		}
-
+		//AnnotationMetadata表示某个类的注解信息，并不一定要加载这个类
 		AnnotationMetadata metadata;
+		//如果AnnotatedBeanDefinition，则直接获取AnnotationMetadata
 		if (beanDef instanceof AnnotatedBeanDefinition &&
 				className.equals(((AnnotatedBeanDefinition) beanDef).getMetadata().getClassName())) {
 			// Can reuse the pre-parsed metadata from the given BeanDefinition...

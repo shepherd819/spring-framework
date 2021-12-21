@@ -123,7 +123,7 @@ class ConstructorResolver {
 		Constructor<?> constructorToUse = null;
 		ArgumentsHolder argsHolderToUse = null;
 		Object[] argsToUse = null;
-
+		// 如果getBean()传入了args参数，那构造方法要用的入参就直接确定好了
 		if (explicitArgs != null) {
 			argsToUse = explicitArgs;
 		}
@@ -143,9 +143,10 @@ class ConstructorResolver {
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, constructorToUse, argsToResolve, true);
 			}
 		}
-
+		//如果没有确定要使用的构造方法，或者确定了构造方法但是所要传入的参数值没有确定
 		if (constructorToUse == null || argsToUse == null) {
 			// Take specified constructors, if any.
+			//如果没有指定构造方法，那就获取beanClass中的所有构造方法作为候选者
 			Constructor<?>[] candidates = chosenCtors;
 			if (candidates == null) {
 				Class<?> beanClass = mbd.getBeanClass();
@@ -159,7 +160,7 @@ class ConstructorResolver {
 							"] from ClassLoader [" + beanClass.getClassLoader() + "] failed", ex);
 				}
 			}
-
+			// 如果只有一个候选构造方法，并且没有指定所要使用的构造方法参数，并且该bd没有指定构造方法参数，那就直接用这个无参的构造方法实例化
 			if (candidates.length == 1 && explicitArgs == null && !mbd.hasConstructorArgumentValues()) {
 				Constructor<?> uniqueCandidate = candidates[0];
 				if (uniqueCandidate.getParameterCount() == 0) {
@@ -177,12 +178,14 @@ class ConstructorResolver {
 			boolean autowiring = (chosenCtors != null ||
 					mbd.getResolvedAutowireMode() == AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR);
 			ConstructorArgumentValues resolvedValues = null;
-
+			// 确定要选择的构造方法的参数个数的最小值，后续判断候选构造方法的参数个数如果小于minNrOfArgs则直接pass
 			int minNrOfArgs;
 			if (explicitArgs != null) {
+				// 如果直接传了构造方法参数值，那么所用的构造方法的参数个数肯定不能少于传入的方法参数值个数
 				minNrOfArgs = explicitArgs.length;
 			}
 			else {
+				// 通过bd传了构造方法参数值，因为有可能是通过下标制定了，比如0位置的值，2位置的值，虽然只指定了2个值，但是构造方法的参数需要3个
 				ConstructorArgumentValues cargs = mbd.getConstructorArgumentValues();
 				resolvedValues = new ConstructorArgumentValues();
 				minNrOfArgs = resolveConstructorArguments(beanName, mbd, bw, cargs, resolvedValues);
@@ -192,8 +195,9 @@ class ConstructorResolver {
 			int minTypeDiffWeight = Integer.MAX_VALUE;
 			Set<Constructor<?>> ambiguousConstructors = null;
 			LinkedList<UnsatisfiedDependencyException> causes = null;
-
+			//遍历候选构造方法进行筛选
 			for (Constructor<?> candidate : candidates) {
+				//当前遍历的构造方法的参数个数
 				Class<?>[] paramTypes = candidate.getParameterTypes();
 
 				if (constructorToUse != null && argsToUse != null && argsToUse.length > paramTypes.length) {
@@ -201,6 +205,7 @@ class ConstructorResolver {
 					// do not look any further, there are only less greedy constructors left.
 					break;
 				}
+				// 如果参数个数小于所要求的参数个数，则遍历下一个，这里考虑的是同时存在public和非public的构造方法
 				if (paramTypes.length < minNrOfArgs) {
 					continue;
 				}

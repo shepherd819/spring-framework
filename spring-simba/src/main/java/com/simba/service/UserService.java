@@ -1,23 +1,18 @@
-package com.simba.lession4.service;
+package com.simba.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 @Component
-//@DependsOn("userService")
-public class OrderService {
-
+public class UserService {
 	@Autowired
-	private User user;
-
-
-	@Lookup("user")
-	public User a(){return null;};
+	OrderService orderService;
 
 	public void test(){
-//		System.out.println(user);
 		System.out.println(a());
 	}
+
+	@Lookup
+	public OrderService a(){return null;}
 }
