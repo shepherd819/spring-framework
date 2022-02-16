@@ -270,6 +270,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
 			}
+			//什么是配置类
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
@@ -281,6 +282,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 
 		// Sort by previously determined @Order value, if applicable
+		// 通过@Order可以排序，升序排序，order越小越靠前
 		configCandidates.sort((bd1, bd2) -> {
 			int i1 = ConfigurationClassUtils.getOrder(bd1.getBeanDefinition());
 			int i2 = ConfigurationClassUtils.getOrder(bd2.getBeanDefinition());
@@ -311,10 +313,15 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 		Set<BeanDefinitionHolder> candidates = new LinkedHashSet<>(configCandidates);
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
-		do {
+		// 递归解析配置类，有可能通过解析一个配置类，得到了其他的配置类，比如扫描和Import
+		do { //第一层循环，有可能得到新的配置类
+			//解析配置类，会把每个beanDefinitionHolder首先封装为ConfigurationClass
+			//在这个过程中会进行扫描、导入等步骤，从而会找到其他的ConfigurationClass
+			//解析配置类的结果是什么？ 有可能得到新的配置类
 			parser.parse(candidates);
 			parser.validate();
 
+			//configurationClasses就相当于是解析之后的结果
 			Set<ConfigurationClass> configClasses = new LinkedHashSet<>(parser.getConfigurationClasses());
 			configClasses.removeAll(alreadyParsed);
 
@@ -328,6 +335,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			alreadyParsed.addAll(configClasses);
 
 			candidates.clear();
+			//如果发现BeanDefinition增加了，则有可能增加了配置类
 			if (registry.getBeanDefinitionCount() > candidateNames.length) {
 				String[] newCandidateNames = registry.getBeanDefinitionNames();
 				Set<String> oldCandidateNames = new HashSet<>(Arrays.asList(candidateNames));
@@ -338,6 +346,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				for (String candidateName : newCandidateNames) {
 					if (!oldCandidateNames.contains(candidateName)) {
 						BeanDefinition bd = registry.getBeanDefinition(candidateName);
+						//检查多出来的BeanDefinition是不是配置类，需不需要解析
 						if (ConfigurationClassUtils.checkConfigurationClassCandidate(bd, this.metadataReaderFactory) &&
 								!alreadyParsedClasses.contains(bd.getBeanClassName())) {
 							candidates.add(new BeanDefinitionHolder(bd, candidateName));

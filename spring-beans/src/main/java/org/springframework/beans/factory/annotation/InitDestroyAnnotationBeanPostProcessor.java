@@ -80,10 +80,10 @@ public class InitDestroyAnnotationBeanPostProcessor
 	protected transient Log logger = LogFactory.getLog(getClass());
 
 	@Nullable
-	private Class<? extends Annotation> initAnnotationType;
+	private Class<? extends Annotation> initAnnotationType; //@PostContruct
 
 	@Nullable
-	private Class<? extends Annotation> destroyAnnotationType;
+	private Class<? extends Annotation> destroyAnnotationType; //@PreDestroy
 
 	private int order = Ordered.LOWEST_PRECEDENCE;
 
@@ -171,6 +171,8 @@ public class InitDestroyAnnotationBeanPostProcessor
 
 	@Override
 	public boolean requiresDestruction(Object bean) {
+		//检查是否有@PreDestroy注解
+//		findLifecycleMetadata(bean.getClass()) 包含查找的初始化和销毁方法
 		return findLifecycleMetadata(bean.getClass()).hasDestroyMethods();
 	}
 
@@ -196,6 +198,7 @@ public class InitDestroyAnnotationBeanPostProcessor
 	}
 
 	private LifecycleMetadata buildLifecycleMetadata(final Class<?> clazz) {
+		//查找当前正在创建的bean中有没有@PreConstruct、@PreDestroy注解了的方法
 		List<LifecycleElement> initMethods = new ArrayList<>();
 		List<LifecycleElement> destroyMethods = new ArrayList<>();
 		Class<?> targetClass = clazz;

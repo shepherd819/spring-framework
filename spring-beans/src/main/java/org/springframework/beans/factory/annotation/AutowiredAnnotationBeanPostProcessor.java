@@ -614,6 +614,9 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			Field field = (Field) this.member;
 			Object value;
 			if (this.cached) {
+				//对于原型bean，第一次创建的时候，也找注入点，然后进行注入，此时cached为false，注入完了之后cached为true
+				//第二次创建的时候，先找注入点(此时会拿到缓存好的注入点)，也就是AutowiredFieldElement对象，测试cached为true
+				//注入点内并没有缓存被注入的具体bean对象，而是beanName，这样就能保证注入到不同的原型bean对象
 				value = resolvedCachedArgument(beanName, this.cachedFieldValue);
 			}
 			else {

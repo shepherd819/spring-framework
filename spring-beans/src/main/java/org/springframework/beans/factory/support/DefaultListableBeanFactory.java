@@ -1190,7 +1190,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Nullable
 	public Object resolveDependency(DependencyDescriptor descriptor, @Nullable String requestingBeanName,
 			@Nullable Set<String> autowiredBeanNames, @Nullable TypeConverter typeConverter) throws BeansException {
-		//获取方法入参名字
+		//如果是方法描述，获取方法入参名字，需要注册方法参数名发现器
 		descriptor.initParameterNameDiscovery(getParameterNameDiscoverer());
 		//所需要的类型是Optional
 		if (Optional.class == descriptor.getDependencyType()) {
