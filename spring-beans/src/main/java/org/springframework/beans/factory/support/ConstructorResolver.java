@@ -118,6 +118,8 @@ class ConstructorResolver {
 			@Nullable Constructor<?>[] chosenCtors, @Nullable Object[] explicitArgs) {
 
 		BeanWrapperImpl bw = new BeanWrapperImpl();
+		//设置bw中的ConversionService(类型转换用)
+		//并且将容器中用户自定义的类型转换器赋值给bw中customEditors
 		this.beanFactory.initBeanWrapper(bw);
 
 		Constructor<?> constructorToUse = null;
@@ -128,6 +130,7 @@ class ConstructorResolver {
 			argsToUse = explicitArgs;
 		}
 		else {
+			//beanDefinition中可以设置构造方法指定位置的参数
 			Object[] argsToResolve = null;
 			synchronized (mbd.constructorArgumentLock) {
 				constructorToUse = (Constructor<?>) mbd.resolvedConstructorOrFactoryMethod;

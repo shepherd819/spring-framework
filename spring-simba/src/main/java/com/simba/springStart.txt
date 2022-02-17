@@ -1,0 +1,10 @@
+BeanFactory
+
+BeanPostProcessor
+
+1.创建bean工厂 DefaultListableBeanFactory -> beanFactory属性
+2.AnnotatedBeanDefinitionReader -StandardEnvironment -ConditionEvaluator -ConditionEvaluator
+    internalConfigurationAnnotationProcessor ConfigurationClassPostProcessor
+3.ClassPathBeanDefinitionScanner
+
+ApplicationListenerDetector

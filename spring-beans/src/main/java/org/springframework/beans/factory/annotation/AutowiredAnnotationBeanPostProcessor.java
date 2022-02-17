@@ -244,12 +244,14 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			throws BeanCreationException {
 
 		// Let's check for lookup methods here...
-		if (!this.lookupMethodsChecked.contains(beanName)) {
+		if (!this.lookupMethodsChecked.contains(beanName)) { //处理@LookUp注解了的方法
 			try {
 				ReflectionUtils.doWithMethods(beanClass, method -> {
 					Lookup lookup = method.getAnnotation(Lookup.class);
 					if (lookup != null) {
 						Assert.state(this.beanFactory != null, "No BeanFactory available");
+						//将@Lookup注解的方法，和@Lookup注解指定的value封装成LookupOverride对象设置到beanDefinition中去
+						//执行@Lookup注解的方法时，如果value有值则根据value去容器中找，如果value没值则根据方法返回类型找,此时找到多个会报错
 						LookupOverride override = new LookupOverride(method, lookup.value());
 						try {
 							RootBeanDefinition mbd = (RootBeanDefinition)
@@ -303,10 +305,10 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 						else if (primaryConstructor != null) {
 							continue;
 						}
-						//当前遍历的构造方法是否加了@Autowired注解
+						//当前遍历的构造方法是否加了@Autowired注解@Value不能加在构造方法上
 						AnnotationAttributes ann = findAutowiredAnnotation(candidate);
 						if (ann == null) {
-							//如果beanClass是代理类，则得到被代理的类的类型
+							//如果beanClass是代理类，则得到被代理的类的类型(如加了@Configuration注解的配置类)
 							Class<?> userClass = ClassUtils.getUserClass(beanClass);
 							if (userClass != beanClass) {
 								try {

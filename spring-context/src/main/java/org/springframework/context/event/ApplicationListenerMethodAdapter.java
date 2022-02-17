@@ -99,6 +99,7 @@ public class ApplicationListenerMethodAdapter implements GenericApplicationListe
 
 	private static List<ResolvableType> resolveDeclaredEventTypes(Method method, @Nullable EventListener ann) {
 		int count = method.getParameterCount();
+		//@EventListener注解的方法最多只能有一个参数
 		if (count > 1) {
 			throw new IllegalStateException(
 					"Maximum one parameter is allowed for event listener method: " + method);

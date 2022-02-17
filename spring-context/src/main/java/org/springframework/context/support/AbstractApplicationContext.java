@@ -522,7 +522,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
-			//1.设置beanFactory类加载器、表达式解析器、类型转化注册器
+			//1.设置beanFactory类加载器、springEL表达式解析器、类型转化注册器
 			//2.添加3个BeanPostProcessor对象到beanPostProcessors属性中去
 			//3.记录ignoreDependencyInterface
 			//4.记录resolvableDependency
@@ -547,12 +547,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
-				initApplicationEventMulticaster();//设置事件广播器
+				//设置事件广播器
+				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
 				onRefresh(); //给子类的模板方法
 
 				// Check for listener beans and register them.
+				//把定义的ApplicationListener的bean对象，设置到ApplicationContext中去，并执行在此之前发布的事件
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
@@ -656,7 +658,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		// Tell the internal bean factory to use the context's class loader etc.
+		//将ApplicationContext里面的classLoader设置给beanFactory
 		beanFactory.setBeanClassLoader(getClassLoader());
+		//设置springEL表达式解析器
 		beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
 		//添加一个ResourceEditorRegistrar，注册一些级别的类型转换器
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
