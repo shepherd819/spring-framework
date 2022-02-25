@@ -78,11 +78,14 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 
 		Method[] methods = throwsAdvice.getClass().getMethods();
 		for (Method method : methods) {
+			//方法名必须为afterThrowing且参数个数为1或4
 			if (method.getName().equals(AFTER_THROWING) &&
 					(method.getParameterCount() == 1 || method.getParameterCount() == 4)) {
 				Class<?> throwableParam = method.getParameterTypes()[method.getParameterCount() - 1];
+				//方法最后一个参数类型必须是Throwable子类
 				if (Throwable.class.isAssignableFrom(throwableParam)) {
 					// An exception handler to register...
+					//接受的异常类型和方法放到map中
 					this.exceptionHandlerMap.put(throwableParam, method);
 					if (logger.isDebugEnabled()) {
 						logger.debug("Found exception handler method on throws advice: " + method);

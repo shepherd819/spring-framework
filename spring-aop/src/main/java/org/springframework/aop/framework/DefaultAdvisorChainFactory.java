@@ -53,17 +53,22 @@ public class DefaultAdvisorChainFactory implements AdvisorChainFactory, Serializ
 
 		// This is somewhat tricky... We have to process introductions first,
 		// but we need to preserve order in the ultimate list.
+		//获取Advisor适配器，会将Advisor适配成Interceptor，默认是DefaultAdvisorAdapterRegistry
 		AdvisorAdapterRegistry registry = GlobalAdvisorAdapterRegistry.getInstance();
+		//从ProxyFactory中拿到所设置的Advice(添加时被封装成了DefaultPointcutAdvisor)
+		//拿到所有的advisor，添加的时候会控制顺序
 		Advisor[] advisors = config.getAdvisors();
 		List<Object> interceptorList = new ArrayList<>(advisors.length);
 		Class<?> actualClass = (targetClass != null ? targetClass : method.getDeclaringClass());
 		Boolean hasIntroductions = null;
 
+		//遍历每个advisor查看是否匹配，匹配则封装成Interceptor
 		for (Advisor advisor : advisors) {
 			if (advisor instanceof PointcutAdvisor) {
+				//PointcutAdvisor会匹配被代理对象的类，和正在执行的方法。springAop基本使用的都是PointCutAdvisor
 				// Add it conditionally.
 				PointcutAdvisor pointcutAdvisor = (PointcutAdvisor) advisor;
-				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) {
+				if (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) { //先匹配类
 					MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();
 					boolean match;
 					if (mm instanceof IntroductionAwareMethodMatcher) {

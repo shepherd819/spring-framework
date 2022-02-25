@@ -147,7 +147,8 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 	 */
 	@Override
 	public final void init() throws ServletException {
-
+		//servlet容器启动会调用，并且其父类GenericServlet的init已经将servletConfig赋值给了config属性
+		//getServletConfig()获取的就是父类的config属性
 		// Set bean properties from init parameters.
 		PropertyValues pvs = new ServletConfigPropertyValues(getServletConfig(), this.requiredProperties);
 		if (!pvs.isEmpty()) {

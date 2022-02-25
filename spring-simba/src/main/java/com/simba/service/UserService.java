@@ -1,11 +1,14 @@
 package com.simba.service;
 
+import com.simba.mapper.OrderMapper;
+import com.simba.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
@@ -14,23 +17,19 @@ import javax.annotation.Resource;
 @Scope("prototype")
 public class UserService {
 	@Autowired
-	OrderService orderService;
+	OrderMapper userMapper;
 
-//	public UserService(OrderService orderService){
-//		System.out.println("1个参数构造方法");
-//	}
-//
-//	public UserService(OrderService orderService, OrderService orderService1){
-//		System.out.println("2个参数构造方法");
-//	}
 
 	public void test(){
-		System.out.println(orderService);
+//		System.out.println(userMapper.selectById());
 //		System.out.println(b());
+		System.out.println("test");
 	}
 
-//	@Lookup("b")
-//	public OrderService b(){
-//		return null;
-//	}
+	@Transactional
+	public void testa() throws Exception {
+		System.out.println("testa");
+		throw new Exception("");
+	}
+
 }

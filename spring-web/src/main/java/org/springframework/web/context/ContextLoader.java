@@ -289,9 +289,11 @@ public class ContextLoader {
 						ApplicationContext parent = loadParentContext(servletContext);
 						cwac.setParent(parent);
 					}
+					//启动父容器
 					configureAndRefreshWebApplicationContext(cwac, servletContext);
 				}
 			}
+			//设置父容器到servletContext的attribute中去
 			servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.context);
 
 			ClassLoader ccl = Thread.currentThread().getContextClassLoader();
