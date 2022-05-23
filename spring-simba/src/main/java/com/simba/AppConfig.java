@@ -18,11 +18,11 @@ import java.lang.reflect.Method;
 
 @ComponentScan
 @Configuration
-@EnableAspectJAutoProxy
-@Component
-@SimbaMapperScan("com.simba.mapper")
-@MapperScan
-@EnableTransactionManagement
+//@EnableAspectJAutoProxy
+//@Component
+//@SimbaMapperScan("com.simba.mapper")
+//@MapperScan
+//@EnableTransactionManagement
 public class AppConfig {
 
 	@Bean("userService")

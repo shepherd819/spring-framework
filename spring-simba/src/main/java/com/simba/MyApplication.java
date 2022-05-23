@@ -8,13 +8,24 @@ import com.simba.service.UserService;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.core.type.ClassMetadata;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
+import org.springframework.stereotype.Component;
 
 public class MyApplication {
 	public static void main(String[] args) throws Exception {
-		test();
-//		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-//		UserService userService = (UserService) context.getBean("userService");
-//		userService.test();
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		UserService userService = (UserService) context.getBean("userService");
+		userService.test();
+//		SimpleMetadataReaderFactory simpleMetadataReaderFactory = new SimpleMetadataReaderFactory();
+//		MetadataReader metadataReader = simpleMetadataReaderFactory.getMetadataReader(UserService.class.getName());
+//		ClassMetadata classMetadata = metadataReader.getClassMetadata();
+//		Resource resource = metadataReader.getResource();
+//		AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
+//		System.out.println(annotationMetadata.hasMetaAnnotation(Component.class.getName()));
 	}
 
 	public static void test() throws Exception {

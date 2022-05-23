@@ -486,7 +486,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		//创建bean之前确保beanDefinition的beanClass属性对应的类被加载了，之前存的是bean的全类名，加载完成变成Class对象
 		Class<?> resolvedClass = resolveBeanClass(mbd, beanName);
 		if (resolvedClass != null && !mbd.hasBeanClass() && mbd.getBeanClassName() != null) {
-			mbdToUse = new RootBeanDefinition(mbd);
+			mbdToUse = new RootBeanDefinition(mbd); //todo 为什么重新new一个rootBeanDefinition？？
 			mbdToUse.setBeanClass(resolvedClass);
 		}
 
@@ -614,6 +614,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		if (earlySingletonExposure) {
 			Object earlySingletonReference = getSingleton(beanName, false);
+			// earlySingletonReference不为空说明出现了循环依赖,如果有aop也已经提前进行
+			// earlyProxyReferences会标记已执行过wrapIfNecessary()方法，所以初始化后的bean后置处理器中的aop不会在执行
+			// 此时如果有其他bean后置处理器改变了bean对象，就会导致注入到其他对象属性中的bean对象和当前的bean对象最终不一致，所以抛异常
 			if (earlySingletonReference != null) {
 				if (exposedObject == bean) {
 					exposedObject = earlySingletonReference;
@@ -1103,6 +1106,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			// Make sure bean class is actually resolved at this point.
 			//syntetic表示合成,如果某些Bean是合成的，那么则不会经过BeanPostProcessor的处理
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
+				//拿到beanDefinition中的类
 				Class<?> targetType = determineTargetType(beanName, mbd);
 				if (targetType != null) {
 					//执行实例化前方法

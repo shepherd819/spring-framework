@@ -12,9 +12,5 @@ public class AService {
 	public void test(){
 		System.out.println(bService);
 	}
-	@Autowired
-	@Qualifier("BService")
-	public void b(BService BService){
 
-	}
 }

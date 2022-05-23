@@ -11,7 +11,6 @@
 
 <!--	<bean id="user" class="com.simba.lession4.service.User" abstract="true"></bean>-->
 	<bean id="orderService" class="com.simba.service.OrderService"></bean>
-	<mvc:annotation-driven></mvc:annotation-driven>
-	<context:annotation-config></context:annotation-config>
-
+<!--	<mvc:annotation-driven></mvc:annotation-driven>-->
+<!--	<context:annotation-config></context:annotation-config>-->
 </beans>
